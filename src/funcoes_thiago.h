@@ -5,6 +5,6 @@ void desenha(int matrizJogada[][3], char tabuleiro[][3]);
 
 void marcaJogada(int matrizJogada[][3], char tabuleiro[][3], char jogador1[], char jogador2[]);
 
-int temVencedor(int matrizJogada[][3], char jogador1[], char jogador2[]);
+int temVencedor(int matrizJogada[][3]);
 
 #endif

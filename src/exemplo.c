@@ -20,7 +20,7 @@ int main() {
 		desenha(posicoes, tabuleiro);
         marcaJogada(posicoes, tabuleiro, "Thiago", "Caio");
 
-		resultado = temVencedor(posicoes, "Thiago", "Caio");
+		resultado = temVencedor(posicoes);
 		if (resultado == 2) {
 			desenha(posicoes, tabuleiro);
 			printf("%s venceu!!", "Caio");

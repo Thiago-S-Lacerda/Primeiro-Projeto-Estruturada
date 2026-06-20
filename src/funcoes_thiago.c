@@ -66,7 +66,7 @@ void marcaJogada(int matrizJogada[][3], char tabuleiro[][3], char jogador1[], ch
     }
 }
 
-int temVencedor(int matrizJogada[][3], char jogador1[], char jogador2[]) {
+int temVencedor(int matrizJogada[][3]) {
     // Verificação das linhas e colunas
     int i, j, somaLinhas, somaColunas;
     for (i = 0; i < 3; i++) {
@@ -76,10 +76,8 @@ int temVencedor(int matrizJogada[][3], char jogador1[], char jogador2[]) {
             somaLinhas += matrizJogada[i][j];
             somaColunas += matrizJogada[j][i];
             if (somaLinhas == 300 || somaColunas == 300) {
-                printf("%s venceu!!", jogador1);
                 return 1;
             } else if (somaLinhas == 1200 || somaColunas == 1200) {
-                printf("%s venceu!!", jogador2);
                 return 2;
             }
         }
@@ -92,10 +90,8 @@ int temVencedor(int matrizJogada[][3], char jogador1[], char jogador2[]) {
         somaDiagonalS += matrizJogada[i][2-i];
 	}
     if (somaDiagonalP == 300 || somaDiagonalS == 300) {
-                printf("%s venceu!!", jogador1);
                 return 1;
             } else if (somaDiagonalP == 1200 || somaDiagonalS == 1200) {
-                printf("%s venceu!!", jogador2);
                 return 2;
             }
 
