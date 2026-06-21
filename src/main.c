@@ -1,24 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-
-char nomeJogador1[50];
-char nomeJogador2[50];
-char simboloJ1, simboloJ2;
-	
-int jogador = 1, posicao, i, j, somaLinhas = 0, somaColunas = 0;
-int matrizEscolha[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};
-char matrizResposta[3][3] = {{'_','_','_'}, {'_','_','_'}, {' ',' ',' '}};
-int somaDiagonal1, somaDiagonal2;
-
-void configuraJogadores();
-void inicia();
+#include "Funcoes_Jogo_Da_Velha.h"
 
 int main(){
 	setlocale(LC_ALL, "Portuguese");
+	char nomeJogador1[50];
+	char nomeJogador2[50];
+	char simboloJ1, simboloJ2;
 
-	configuraJogadores();
-	inicia();
+	int turno;
+	int jogador, posicao, i, j;
+	int posicoesDeEscolha[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};
+	char tabuleiro[3][3] = {{'_','_','_'}, {'_','_','_'}, {' ',' ',' '}};
+
+	configuraJogadores(nomeJogador1, nomeJogador2, &simboloJ1, &simboloJ2, &turno);
+	inicia(posicoesDeEscolha, tabuleiro, &turno, &posicao, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2);
 
 	return 0;
 }
