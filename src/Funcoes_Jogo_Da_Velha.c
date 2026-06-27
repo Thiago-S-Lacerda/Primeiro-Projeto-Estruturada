@@ -7,12 +7,12 @@
 void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ1, char *simboloJ2, int *turno_jogador){
     setlocale(LC_ALL, "Portuguese");
     
-    printf("Digite o nome do 1º jogador: ");
+    printf("Digite o nome do 1ï¿½ jogador: ");
     scanf("%s", nomeJogador1);
-    printf("Digite o nome do 2º jogador: ");
+    printf("Digite o nome do 2ï¿½ jogador: ");
     scanf("%s", nomeJogador2);
 
-    printf("\n%s, você quer ser X ou O? (Digite em caixa alta)\nDigite aqui: ", nomeJogador1);
+    printf("\n%s, vocï¿½ quer ser X ou O? (Digite em caixa alta)\nDigite aqui: ", nomeJogador1);
     scanf(" %c", simboloJ1);
 
     if(*simboloJ1 == 'X'){
@@ -21,7 +21,7 @@ void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ
         *simboloJ2 = 'X';
     }
 
-    printf("Quem vai começar? o 1º jogador <1> ou o 2º jogador <2>?\nDigite aqui: ");
+    printf("Quem vai comeï¿½ar? o 1ï¿½ jogador <1> ou o 2ï¿½ jogador <2>?\nDigite aqui: ");
     scanf("%d", turno_jogador);
 
     printf("\nConfiguracao aceita!\n");
@@ -36,7 +36,7 @@ void inicia(int matrizPosicoes[][3], char tabuleiro[][3], int *turno_jogador, in
     int totalPosicoesJogadas = 0;
     VerificaoVencedor resultado;
 
-    printf("Exemplo das posições:\n");
+    printf("Exemplo das posiï¿½ï¿½es:\n");
 	printf("\t_1_|_2_|_3_\n");
 	printf("\t_4_|_5_|_6_\n");
 	printf("\t 7 | 8 | 9 \n");
@@ -81,11 +81,11 @@ void joga(int *posicaoEscolhida, char nomeJogador1[], char nomeJogador2[], int *
 
     if (*turno_jogador == 1) {
         printf("Vez de %s\n", nomeJogador1);
-        printf("Digite a posição que você quer jogar: ");
+        printf("Digite a posiï¿½ï¿½o que vocï¿½ quer jogar: ");
         scanf("%d", posicaoEscolhida);
     } else if (*turno_jogador == 2) {
         printf("Vez de %s\n", nomeJogador2);
-        printf("Digite a posição que você quer jogar: ");
+        printf("Digite a posiï¿½ï¿½o que vocï¿½ quer jogar: ");
         scanf("%d", posicaoEscolhida);
     }
 }
@@ -135,14 +135,14 @@ void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1
 
     RespostaVerificaoPosicao resultado = verificao_posicao_escolhida(posicaoEscolhida, &posicaoInvalida);
     if ( resultado == POSICAO_JA_OCUPADA) {
-        printf("Essa posição já está ocupada! Tente novamente\n");
+        printf("Essa posiï¿½ï¿½o jï¿½ estï¿½ ocupada! Tente novamente\n");
         system("pause");
         desenha(tabuleiro);
         joga(posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador);
         marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, turno_jogador, posicaoEscolhida);
 
     } else if (resultado == POSICAO_INVALIDA){
-        printf("Essa posição não existe! As posições possíveis são apenas de 0 a 9\n");
+        printf("Essa posiï¿½ï¿½o nï¿½o existe! As posiï¿½ï¿½es possï¿½veis sï¿½o apenas de 0 a 9\n");
         system("pause");
         desenha(tabuleiro);
         joga(posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador);
@@ -151,7 +151,7 @@ void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1
 }
 
 VerificaoVencedor temVencedor(int matrizPosicoes[][3], int posicoesJogadas) {
-    // Verificação das linhas e colunas
+    // Verificaï¿½ï¿½o das linhas e colunas
     int i, j, somaLinhas, somaColunas;
     for (i = 0; i < 3; i++) {
         somaLinhas = 0;
@@ -166,7 +166,7 @@ VerificaoVencedor temVencedor(int matrizPosicoes[][3], int posicoesJogadas) {
             }
         }
 	}
-    // Verificação das diagonais
+    // Verificaï¿½ï¿½o das diagonais
     int somaDiagonalP = 0, somaDiagonalS = 0;
     for (i = 0; i < 3; i++) {
         somaDiagonalP += matrizPosicoes[i][i];
@@ -183,4 +183,89 @@ VerificaoVencedor temVencedor(int matrizPosicoes[][3], int posicoesJogadas) {
     } else {
         return SEM_VENCEDOR;
     }
+}
+
+int casaLivre(int matrizPosicoes[][3], int numeroProcurado){
+    int i, j;
+    for (i  = 0; i < 3; i++){
+        for(j = 0; j < 3; j++){
+            if(matrizPosicoes[i][j] == numeroProcurado){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+int pensaIA(int matrizPosicoes[][3]) {
+    int i, l, c;
+
+    printf("\nIA pensando na jogada...\n");
+    system("pause");
+
+
+    for(l = 0; l < 3; l++){
+        int contaJ1 = 0, contaIA = 0, livres = 0, alvo = -1;
+        for(c = 0; c < 3; c++){
+            if(matrizPosicoes[l][c] == 100) contaJ1++;
+            else if(matrizPosicoes[l][c] == 400) contaJ1++;
+            else{ livres ++; alvo = matrizPosicoes[l][c]; }
+        }
+        if(livres == 1 && (contaIA == 2 || contaJ1 == 2)) {
+            return alvo;
+        }
+    }
+    for(c = 0; c < 3; c++){
+        int contaJ1 = 0, contaIA = 0, livres = 0, alvo = -1;
+        for (l = 0; l < 3; l++){
+            if (matrizPosicoes[l][c] == 100) contaJ1++;
+            else if (matrizPosicoes[l][c] == 400) contaIA++;
+            else { livres++; alvo = matrizPosicoes[l][c]; }
+        }
+        if (livres == 1 && (contaIA == 2 || contaJ1 == 2)){
+            return alvo;
+        }
+    }
+
+    int contaJ1_d1 = 0, contaIA_d1 = 0, livres_d1 = 0, alvo_d1 = -1;
+    for(i = 0; i < 3; i++){
+        if(matrizPosicoes[i][i] == 100) contaJ1_d1++;
+        else if (matrizPosicoes[i][i] == 400) contaIA_d1++;
+        else { livres_d1++; alvo_d1 = matrizPosicoes[i][i]; }
+    }
+    if(livres_d1 && (contaIA_d1 == 2 || contaJ1_d1 == 2)){
+        return alvo_d1;
+    }
+    int contaJ1_d2 = 0, contaIA_d2 = 0, livres_d2 = 0, alvo_d2 = -1;
+    for(i = 0; i < 3; i++){
+        if(matrizPosicoes[i][2 - i] == 100) contaJ1_d2++;
+        else if (matrizPosicoes[i][2 - i] == 400) contaIA_d2++;
+        else { livres_d2++; alvo_d2 = matrizPosicoes[i][i]; }
+    }
+    if(livres_d2 && (contaIA_d2 == 2 || contaJ1_d2 == 2)){
+        return alvo_d2;
+    }
+
+    if (matrizPosicoes[0][0] == 400 && casaLivre(matrizPosicoes, 9)) return 9;
+    if (matrizPosicoes[0][2] == 400 && casaLivre(matrizPosicoes, 7)) return 7;
+    if (matrizPosicoes[2][0] == 400 && casaLivre(matrizPosicoes, 3)) return 3;
+    if (matrizPosicoes[2][2] == 400 && casaLivre(matrizPosicoes, 1)) return 1;
+    if(casaLivre(matrizPosicoes, 5)){
+        return 5;
+    }
+    if (matrizPosicoes[0][0] == 100 && casaLivre(matrizPosicoes, 9)) return 9;
+    if (matrizPosicoes[0][2] == 100 && casaLivre(matrizPosicoes, 7)) return 7;
+    if (matrizPosicoes[2][0] == 100 && casaLivre(matrizPosicoes, 3)) return 3;
+    if (matrizPosicoes[2][2] == 100 && casaLivre(matrizPosicoes, 1)) return 1;
+
+    if(casaLivre(matrizPosicoes, 1)) return 1;
+    if(casaLivre(matrizPosicoes, 3)) return 3;
+    if(casaLivre(matrizPosicoes, 7)) return 7;
+    if(casaLivre(matrizPosicoes, 9)) return 9;
+
+    if(casaLivre(matrizPosicoes, 2)) return 2;
+    if(casaLivre(matrizPosicoes, 4)) return 4;
+    if(casaLivre(matrizPosicoes, 6)) return 6;
+    if(casaLivre(matrizPosicoes, 8)) return 8;
+
+    return 0;
 }
