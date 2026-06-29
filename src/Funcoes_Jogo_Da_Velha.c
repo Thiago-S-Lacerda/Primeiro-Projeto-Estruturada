@@ -21,7 +21,7 @@ void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ
         *simboloJ2 = 'X';
     }
 
-    printf("Quem vai começar? o 1º jogador <1> ou o 2º jogador <2>?\nDigite aqui: ");
+    printf("Quem vai começar? %s <1> ou %s <2>?\nDigite aqui: ", nomeJogador1, nomeJogador2);
     scanf("%d", turno_jogador);
 
     printf("\nConfiguracao aceita!\n");
@@ -31,9 +31,9 @@ void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ
     printf("\033[2J\033[H");
 }
 
-void inicia(int matrizPosicoes[][3], char tabuleiro[][3], int *turno_jogador, int *posicaoEscolhida, char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2){
+void inicia(int matrizPosicoes[][3], char tabuleiro[][3], int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2){
     setlocale(LC_ALL, "Portuguese");
-    int totalPosicoesJogadas = 0;
+    int totalPosicoesJogadas = 0, posicaoEscolhida;
     VerificaoVencedor resultado;
 
     printf("Exemplo das posições:\n");
@@ -44,8 +44,8 @@ void inicia(int matrizPosicoes[][3], char tabuleiro[][3], int *turno_jogador, in
 	
 	while(1) {
         desenha(tabuleiro);
-        joga(posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador);
-        marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, turno_jogador, posicaoEscolhida);
+        joga(&posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador);
+        marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, turno_jogador, &posicaoEscolhida);
         totalPosicoesJogadas += 1;
 
         resultado = temVencedor(matrizPosicoes, totalPosicoesJogadas);
@@ -134,7 +134,7 @@ void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1
     }
 
     RespostaVerificaoPosicao resultado = verificao_posicao_escolhida(posicaoEscolhida, &posicaoInvalida);
-    if ( resultado == POSICAO_JA_OCUPADA) {
+    if (resultado == POSICAO_JA_OCUPADA) {
         printf("Essa posição já está ocupada! Tente novamente\n");
         system("pause");
         desenha(tabuleiro);
@@ -142,7 +142,7 @@ void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1
         marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, turno_jogador, posicaoEscolhida);
 
     } else if (resultado == POSICAO_INVALIDA){
-        printf("Essa posição não existe! As posições possíveis são apenas de 0 a 9\n");
+        printf("Essa posição não existe! As posições possíveis são apenas de 1 a 9\n");
         system("pause");
         desenha(tabuleiro);
         joga(posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador);

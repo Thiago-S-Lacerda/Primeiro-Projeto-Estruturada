@@ -16,7 +16,7 @@ typedef enum {
 
 void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ1, char *simboloJ2, int *turno_jogador);
 
-void inicia(int matrizPosicoes[][3], char tabuleiro[][3], int *turno_jogador, int *posicaoEscolhida, char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2);
+void inicia(int matrizPosicoes[][3], char tabuleiro[][3], int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2);
 
 void desenha(char tabuleiro[][3]);
 
