@@ -1,10 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <locale.h>
-#include "Funcoes_Jogo_Da_Velha.h"
+/*
+	* Título: Jogo da Velha
+	* Autores: Caio Paiva, Thiago Lacerda
+	* Data de Criação: 11/06/2026
+	* Última Alteração: 29/06/2026
+	* Descrição: Projeto de Programação Estruturada. Desenvolvimento de um Jogo da Velha em linguagem C
+ */
 
-int main(){
-	setlocale(LC_ALL, "Portuguese");
+#include "Partida.h"
+
+int main() {
 	char nomeJogador1[50], nomeJogador2[50];
 	char simboloJ1, simboloJ2;
 	int turno; 
