@@ -67,12 +67,6 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
     int matrizPosicoes[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};
 	char tabuleiro[3][3] = {{'_','_','_'}, {'_','_','_'}, {' ',' ',' '}};
     VerificaoVencedor resultado;
-
-    printf("Exemplo das posições:\n");
-	printf("\t_1_|_2_|_3_\n");
-	printf("\t_4_|_5_|_6_\n");
-	printf("\t 7 | 8 | 9 \n");
-	system("pause");
 	
     while(1) {
         desenha(tabuleiro);
@@ -98,7 +92,13 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
             break;
         } else if (resultado == EMPATE){
             desenha(tabuleiro);
-            printf("%s e %s empataram!!\n", nomeJogador1, nomeJogador2);
+
+            if (modoDeJogo == 1) {
+                printf("%s e %s empataram!!\n", nomeJogador1, nomeJogador2);
+            } else {
+                printf("%s e a IA empataram!!\n", nomeJogador2);
+            }
+
             system("pause");
             break;
         } else {

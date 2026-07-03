@@ -19,7 +19,7 @@ void joga(int matrizPosicoes[][3], int *posicaoEscolhida, char nomeJogador1[], c
     } else {
         if (*turno_jogador == 1) {
             printf("Vez da IA\n");
-            *posicaoEscolhida = pensaIA(matrizPosicoes);
+            *posicaoEscolhida = jogaIA(matrizPosicoes);
         } else if (*turno_jogador == 2) {
             printf("Vez de %s\n", nomeJogador2);
             printf("Digite a posição que você quer jogar: ");

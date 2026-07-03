@@ -6,10 +6,11 @@
 
 void desenha(char tabuleiro[][3]) {
 		printf("\033[2J\033[H");
+        printf("\t\t\t\t    Exemplo das posições:");
 		printf("\n");
-        printf("\t_%c_|_%c_|_%c_\n", tabuleiro[0][0], tabuleiro[0][1], tabuleiro[0][2]);
-		printf("\t_%c_|_%c_|_%c_\n", tabuleiro[1][0], tabuleiro[1][1], tabuleiro[1][2]);
-		printf("\t %c | %c | %c \n", tabuleiro[2][0], tabuleiro[2][1], tabuleiro[2][2]);
+        printf("\t_%c_|_%c_|_%c_\t\t\t_1_|_2_|_3_\n", tabuleiro[0][0], tabuleiro[0][1], tabuleiro[0][2]);
+		printf("\t_%c_|_%c_|_%c_\t\t\t_4_|_5_|_6_\n", tabuleiro[1][0], tabuleiro[1][1], tabuleiro[1][2]);
+		printf("\t %c | %c | %c \t\t\t 7 | 8 | 9 \n", tabuleiro[2][0], tabuleiro[2][1], tabuleiro[2][2]);
         printf("\n");
 }
 
