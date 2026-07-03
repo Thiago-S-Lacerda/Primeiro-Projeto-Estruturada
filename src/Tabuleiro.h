@@ -10,7 +10,6 @@ typedef enum {
 
 typedef enum {
     POSICAO_INVALIDA,
-    POSICAO_JA_OCUPADA,
     POSICAO_VALIDA
 } RespostaVerificaoPosicao;
 
@@ -18,7 +17,8 @@ void desenha(char tabuleiro[][3]);
 
 VerificaoVencedor temVencedor(int matrizPosicoes[][3], int posicoesJogadas);
 
-void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2, int *turno_jogador, int *posicaoEscolhida);
+void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2, char simboloIA, int *turno_jogador, int *posicaoEscolhida, int modoDeJogo);
 
-RespostaVerificaoPosicao verificao_posicao_escolhida(int *posicaoEscolhida, int *posicaoInvalida);
+RespostaVerificaoPosicao verificao_posicao_escolhida(int *posicaoEscolhida);
+
 #endif
