@@ -7,6 +7,7 @@
 
 #define PORTA 8080
 
+#pragma comment(lib, "ws2_32.lib")
 SOCKET cliente_socket() {
     WSADATA wsadata;
 
