@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include "Partida.h"
 #include "Tabuleiro.h"
 #include "JogadorTeclado.h"
+#include "JogadorRemoto.h"
 
 void desenha(char tabuleiro[][3]) {
 		printf("\033[2J\033[H");
@@ -56,18 +58,23 @@ RespostaVerificaoPosicao verificao_posicao_escolhida(int *posicaoEscolhida) {
     }
 }
 
-void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1[], char nomeJogador2[], char simboloJ1, char simboloJ2, char simboloIA, int *turno_jogador, int *posicaoEscolhida, int modoDeJogo) {
+void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char simboloJ1, char simboloJ2, char simboloIA, int *turno_jogador, int *posicaoEscolhida, int *totalPosicoesJogadas, ModoDeJogo modoDeJogo, SOCKET sock) {
     setlocale(LC_ALL, "Portuguese");
-    int posicaoOcupada = 0;
     int posicaoInvalida = 0;
     RespostaVerificaoPosicao resultado = verificao_posicao_escolhida(posicaoEscolhida);
+    
     if (resultado == POSICAO_INVALIDA){
         posicaoInvalida = 1;
-        printf("Essa posição não existe! As posições possíveis são apenas de 1 a 9\n");
-        system("pause");
-        desenha(tabuleiro);
-        joga(matrizPosicoes, posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador, modoDeJogo);
-        marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, simboloIA, turno_jogador, posicaoEscolhida, modoDeJogo);
+        if (modoDeJogo == MODO_SERVIDOR && *turno_jogador == 1) {
+            printf("Essa posição não existe! As posições possíveis são apenas de 1 a 9\n");
+            system("pause");
+        } else if (modoDeJogo == MODO_CLIENTE && *turno_jogador == 2) {
+            printf("Essa posição não existe! As posições possíveis são apenas de 1 a 9\n");
+            system("pause");
+        } else if (modoDeJogo == MODO_PVP || modoDeJogo == MODO_IA) {
+            printf("Essa posição não existe! As posições possíveis são apenas de 1 a 9\n");
+            system("pause");
+        }
     }
     if (posicaoInvalida == 0) {
         int linha[9] = {0,0,0,1,1,1,2,2,2};
@@ -77,47 +84,62 @@ void marcaJogada(int matrizPosicoes[][3], char tabuleiro[][3], char nomeJogador1
 
         int i = linha[p];
         int j = coluna[p];
-        if (modoDeJogo == 1) {
+        if (modoDeJogo == MODO_PVP) {
             if(matrizPosicoes[i][j] != 100 && matrizPosicoes[i][j] != 400){
                 if (*turno_jogador == 1) {
                     matrizPosicoes[i][j] = 100;
                     tabuleiro[i][j] = simboloJ1;
                     *turno_jogador = 2;
-                    posicaoOcupada = 1;
                 } else if (*turno_jogador == 2){
                     matrizPosicoes[i][j] = 400;
                     tabuleiro[i][j] = simboloJ2;
                     *turno_jogador = 1;
-                    posicaoOcupada = 1;
                 }
+                *totalPosicoesJogadas += 1;
             } else {
                 printf("Essa posição já está ocupada! Tente novamente\n");
                 system("pause");
-                desenha(tabuleiro);
-                joga(matrizPosicoes, posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador, modoDeJogo);
-                marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, simboloIA, turno_jogador, posicaoEscolhida, modoDeJogo);
             }
-        } else {
+        } else if (modoDeJogo == MODO_IA) {
             if(matrizPosicoes[i][j] != 100 && matrizPosicoes[i][j] != 400){
                 if (*turno_jogador == 1) {
                     matrizPosicoes[i][j] = 100;
                     tabuleiro[i][j] = simboloIA;
                     *turno_jogador = 2;
-                    posicaoOcupada = 1;
                 } else if (*turno_jogador == 2){
                     matrizPosicoes[i][j] = 400;
                     tabuleiro[i][j] = simboloJ2;
                     *turno_jogador = 1;
-                    posicaoOcupada = 1;
                 }
+                *totalPosicoesJogadas += 1;
             } else {
                 printf("Essa posição já está ocupada! Tente novamente\n");
                 system("pause");
-                desenha(tabuleiro);
-                joga(matrizPosicoes, posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador, modoDeJogo);
-                marcaJogada(matrizPosicoes, tabuleiro, nomeJogador1, nomeJogador2, simboloJ1, simboloJ2, simboloIA, turno_jogador, posicaoEscolhida, modoDeJogo);
+            }
+        } else {
+            if(matrizPosicoes[i][j] != 100 && matrizPosicoes[i][j] != 400){
+                if (*turno_jogador == 1) {
+                    matrizPosicoes[i][j] = 100;
+                    tabuleiro[i][j] = 'X';
+                    *turno_jogador = 2;
+                } else if (*turno_jogador == 2){
+                    matrizPosicoes[i][j] = 400;
+                    tabuleiro[i][j] = 'O';
+                    *turno_jogador = 1;
+                }
+                *totalPosicoesJogadas += 1;
+            } else {
+                if (modoDeJogo == MODO_SERVIDOR && *turno_jogador == 1) {
+                    printf("Essa posição já está ocupada! Tente novamente\n");
+                    system("pause");
+                } else if (modoDeJogo == MODO_CLIENTE && *turno_jogador == 2) {
+                    printf("Essa posição já está ocupada! Tente novamente\n");
+                    system("pause");
+                } else if (modoDeJogo == MODO_PVP || modoDeJogo == MODO_IA) {
+                    printf("Essa posição não existe! As posições possíveis são apenas de 1 a 9\n");
+                    system("pause");
+                }
             }
         }
     }
-    
 }
