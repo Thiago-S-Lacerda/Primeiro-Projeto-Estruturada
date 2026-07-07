@@ -8,7 +8,7 @@
 #include "JogadorRemoto.h"
 
 #define PORTA 8080
-#pragma coment(lib, "ws2_32.lib")
+#define IP "127.0.0.1"
 
 SOCKET conecta() {
     WSADATA wsadata;
@@ -24,16 +24,18 @@ SOCKET conecta() {
     socketCliente = socket(AF_INET, SOCK_STREAM, 0);
     if (socketCliente == INVALID_SOCKET) {
         printf("Erro na criação do socket\n");
+        WSACleanup();
         exit(EXIT_FAILURE);
     }
 
     alvoComunicacao.sin_family = AF_INET;
     alvoComunicacao.sin_port = htons(PORTA);
-    alvoComunicacao.sin_addr.S_un.S_addr = inet_addr("127.0.0.1"); 
+    alvoComunicacao.sin_addr.S_un.S_addr = inet_addr(IP); 
 
     if (connect(socketCliente, (struct sockaddr*)&alvoComunicacao, sizeof(alvoComunicacao)) < 0) {
         printf("Erro na conexão\n");
         closesocket(socketCliente);
+        WSACleanup();
         exit(EXIT_FAILURE);
     }
 
@@ -43,7 +45,7 @@ SOCKET conecta() {
 
 SOCKET ligarServidor(){
     WSADATA wsa;
-    SOCKET idSocket, cliente;
+    SOCKET idSocket;
     struct sockaddr_in enderecoServidor;
     socklen_t endereco_len = sizeof(enderecoServidor);
 
@@ -61,17 +63,19 @@ SOCKET ligarServidor(){
 
     enderecoServidor.sin_family = AF_INET;
     enderecoServidor.sin_port = htons(PORTA);
-    enderecoServidor.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    enderecoServidor.sin_addr.S_un.S_addr = inet_addr(IP);
 
     if (bind(idSocket, (struct sockaddr *)&enderecoServidor, sizeof(enderecoServidor)) < 0){
         printf("Erro ao dar bind.\n");
         closesocket(idSocket);
+        WSACleanup();
         exit(EXIT_FAILURE);
     }
     
     if (listen(idSocket, 1) < 0) {
         printf("Erro no listen.\n");
         closesocket(idSocket);
+        WSACleanup();
         exit(EXIT_FAILURE);
     }
 
@@ -82,27 +86,28 @@ void aceitaCliente(SOCKET sockServidor, SOCKET *sockCliente) {
     SOCKET cliente;
     struct sockaddr_in enderecoServidor;
     socklen_t endereco_len = sizeof(enderecoServidor);
-    char mensagem_bruta[3];
 
-    enderecoServidor.sin_family = AF_INET;
-    enderecoServidor.sin_port = htons(PORTA);
-    enderecoServidor.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
-
-    printf("Esperando outro jogador...\n");
+    printf("Esperando conexão do outro jogador...\n");
 
     *sockCliente = accept(sockServidor, (struct sockaddr *)&enderecoServidor, &endereco_len);
     if (cliente < 0) {
         perror("Erro no accept\n");
         closesocket(sockServidor);
+        WSACleanup();
         exit(EXIT_FAILURE);
     }
 }
 
 void recebeMensagem(SOCKET sock, int *jogada) {
     int posicao;
+
+    printf("Esperando jogada do oponente...\n");
     int bytes = recv(sock, (char*)&posicao, sizeof(posicao), 0);
     if (bytes <= 0) {
         printf("Cliente desconectou!\n");
+        closesocket(sock);
+        WSACleanup();
+        exit(EXIT_FAILURE);
     } else {
         *jogada = posicao;
     }

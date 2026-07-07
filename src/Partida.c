@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-#include <unistd.h>
 #include <winsock2.h>
-#include <ws2tcpip.h>
 #include "Tabuleiro.h"
 #include "JogadorTeclado.h"
 #include "Partida.h"
@@ -15,12 +13,12 @@ void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ
 
     switch (modoDeJogo) {
         case MODO_PVP:
-            printf("Digite o nome do 1Âº jogador: ");
+            printf("Digite o nome do 1º jogador: ");
             scanf("%s", nomeJogador1);
-            printf("Digite o nome do 2Âº jogador: ");
+            printf("Digite o nome do 2º jogador: ");
             scanf("%s", nomeJogador2);
 
-            printf("\n%s, vocÃª quer ser X ou O? (Digite em caixa alta)\nDigite aqui: ", nomeJogador1);
+            printf("\n%s, você quer ser X ou O? (Digite em caixa alta)\nDigite aqui: ", nomeJogador1);
             scanf(" %c", simboloJ1);
 
             if(*simboloJ1 == 'X'){
@@ -29,7 +27,7 @@ void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ
                 *simboloJ2 = 'X';
             }
 
-            printf("Quem vai comeÃ§ar? %s <1> ou %s <2>?\nDigite aqui: ", nomeJogador1, nomeJogador2);
+            printf("Quem vai começar? %s <1> ou %s <2>?\nDigite aqui: ", nomeJogador1, nomeJogador2);
             scanf("%d", turno_jogador);
 
             printf("\nConfiguracao aceita!\n");
@@ -43,7 +41,7 @@ void configuraJogadores(char nomeJogador1[], char nomeJogador2[], char *simboloJ
             printf("Digite o nome do jogador: ");
             scanf("%s", nomeJogador2);
 
-            printf("\n%s, vocÃª quer ser X ou O? (Digite em caixa alta)\nDigite aqui: ", nomeJogador2);
+            printf("\n%s, você quer ser X ou O? (Digite em caixa alta)\nDigite aqui: ", nomeJogador2);
             scanf(" %c", simboloJ2);
 
             if(*simboloJ2 == 'X'){
@@ -68,7 +66,6 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
     int totalPosicoesJogadas = 0, posicaoEscolhida;
     int matrizPosicoes[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};
 	char tabuleiro[3][3] = {{'_','_','_'}, {'_','_','_'}, {' ',' ',' '}};
-    int jogou = 0;
     VerificaoVencedor resultado;
     SOCKET sock, sock_resposta;
 	
@@ -80,7 +77,6 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
     }
 
     while(1) {
-        jogou = 0;
         desenha(tabuleiro);
         if (modoDeJogo == MODO_SERVIDOR) {
             jogaRemoto(&posicaoEscolhida, turno_jogador, HOST, sock_resposta);
@@ -89,12 +85,9 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
         } else if (modoDeJogo == MODO_IA) {
             jogaIA(matrizPosicoes, &posicaoEscolhida, nomeJogador2, turno_jogador);
         } else {
-            joga(matrizPosicoes, &posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador, modoDeJogo);
+            joga(&posicaoEscolhida, nomeJogador1, nomeJogador2, turno_jogador);
         }
         marcaJogada(matrizPosicoes, tabuleiro, simboloJ1, simboloJ2, simboloIA, turno_jogador, &posicaoEscolhida, &totalPosicoesJogadas, modoDeJogo, sock);
-        if (jogou == 1) {
-            totalPosicoesJogadas += 1;
-        }
 
         resultado = temVencedor(matrizPosicoes, totalPosicoesJogadas);
         if (resultado == VENCEDOR_1_JOGADOR) {
@@ -111,6 +104,7 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
             break;
         } else if (resultado == VENCEDOR_2_JOGADOR) {
             desenha(tabuleiro);
+
             if (modoDeJogo == MODO_SERVIDOR || modoDeJogo == MODO_CLIENTE) {
                 printf("O Cliente venceu!!\n");
             } else {
@@ -141,4 +135,5 @@ void inicia(int *turno_jogador, char nomeJogador1[], char nomeJogador2[], char s
     } else if (modoDeJogo == MODO_CLIENTE) {
         closesocket(sock);
     }
+    WSACleanup();
 }

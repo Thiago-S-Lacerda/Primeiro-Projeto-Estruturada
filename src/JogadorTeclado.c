@@ -4,7 +4,7 @@
 #include "JogadorTeclado.h"
 #include "JogadorIA.h"
 
-void joga(int matrizPosicoes[][3], int *posicaoEscolhida, char nomeJogador1[], char nomeJogador2[], int *turno_jogador, int modoDeJogo) {
+void joga(int *posicaoEscolhida, char nomeJogador1[], char nomeJogador2[], int *turno_jogador) {
     setlocale(LC_ALL, "Portuguese");
 
     if (*turno_jogador == 1) {
