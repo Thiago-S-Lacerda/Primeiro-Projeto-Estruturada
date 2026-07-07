@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-#include "Partida.h"
 #include "Tabuleiro.h"
-#include "JogadorTeclado.h"
 #include "JogadorRemoto.h"
 
 void desenha(char tabuleiro[][3]) {

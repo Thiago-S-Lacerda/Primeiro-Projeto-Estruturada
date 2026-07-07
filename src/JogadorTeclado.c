@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <locale.h>
-#include "Partida.h"
 #include "JogadorTeclado.h"
-#include "JogadorIA.h"
 
 void joga(int *posicaoEscolhida, char nomeJogador1[], char nomeJogador2[], int *turno_jogador) {
     setlocale(LC_ALL, "Portuguese");

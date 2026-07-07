@@ -83,14 +83,13 @@ SOCKET ligarServidor(){
 }
 
 void aceitaCliente(SOCKET sockServidor, SOCKET *sockCliente) {
-    SOCKET cliente;
     struct sockaddr_in enderecoServidor;
     socklen_t endereco_len = sizeof(enderecoServidor);
 
     printf("Esperando conexão do outro jogador...\n");
 
     *sockCliente = accept(sockServidor, (struct sockaddr *)&enderecoServidor, &endereco_len);
-    if (cliente < 0) {
+    if (*sockCliente < 0) {
         perror("Erro no accept\n");
         closesocket(sockServidor);
         WSACleanup();
